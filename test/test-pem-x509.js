@@ -39,7 +39,7 @@ test('Test PEM key end headers', t => {
   t.end()
 })
 
-test.skip('Test PEM matchX509', t => {
+test('Test PEM matchX509', t => {
   const eols = ['\r', '\r\n', '\n']
   for (let i = 0; i < beginHeaders.length; i++) {
     const eol = eols[i % eols.length]

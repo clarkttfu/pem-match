@@ -1,35 +1,36 @@
 const test = require('tape')
 const PEM = require('../index.js')
 
-const beginHeaders = [
-  // PKCS#1
+const beginPrivHeaders = [
   '-----BEGIN RSA PRIVATE KEY-----',
-  '-----BEGIN RSA PUBLIC KEY-----',
-  // PKCS#8
   '-----BEGIN PRIVATE KEY-----',
   '-----BEGIN ENCRYPTED PRIVATE KEY-----',
+  '-----BEGIN DSA PRIVATE KEY-----'
+]
+
+const endPrivHeaders = [
+  '-----END RSA PRIVATE KEY-----',
+  '-----END PRIVATE KEY-----',
+  '-----END ENCRYPTED PRIVATE KEY-----',
+  '-----END DSA PRIVATE KEY-----'
+]
+
+const beginPubHeaders = [
+  '-----BEGIN RSA PUBLIC KEY-----',
   '-----BEGIN PUBLIC KEY-----',
-  // DSA
-  '-----BEGIN DSA PRIVATE KEY-----',
   '-----BEGIN DSA PUBLIC KEY-----',
-  // SSH2
   '---- BEGIN SSH2 PUBLIC KEY ----'
 ]
 
-const endHeaders = [
-  // PKCS#1
-  '-----END RSA PRIVATE KEY-----',
+const endPubHeaders = [
   '-----END RSA PUBLIC KEY-----',
-  // PKCS#8
-  '-----END PRIVATE KEY-----',
-  '-----END ENCRYPTED PRIVATE KEY-----',
   '-----END PUBLIC KEY-----',
-  // DSA
-  '-----END DSA PRIVATE KEY-----',
   '-----END DSA PUBLIC KEY-----',
-  // SSH2
   '---- END SSH2 PUBLIC KEY ----'
 ]
+
+const beginHeaders = beginPrivHeaders.concat(beginPubHeaders)
+const endHeaders = endPrivHeaders.concat(endPubHeaders)
 
 test('Test PEM key begin headers', t => {
   for (const h of beginHeaders) {
@@ -65,12 +66,50 @@ test('Test PEM matchKey', t => {
     t.ok(PEM.matchKey(pem2), `matchKey without eol ${pem}`)
 
     const fake1 = `${beginHeaders[i]}${eol}${eol}${endHeaders[i]}`
-    const fake2 = `${beginHeaders[i]}${eol}AQ==`
-    const fake3 = `AQ==${eol}${endHeaders[i]}`
+    const fake2 = `${beginHeaders[i]}%^${eol}${endHeaders[i]}`
+    const fake3 = `${beginHeaders[i]}${eol}AQ==`
+    const fake4 = `AQ==${eol}${endHeaders[i]}`
 
     t.notOk(PEM.matchKey(fake1), `matchKey with eol ${fake1}`)
     t.notOk(PEM.matchKey(fake2), `matchKey with eol ${fake2}`)
     t.notOk(PEM.matchKey(fake3), `matchKey with eol ${fake3}`)
+    t.notOk(PEM.matchKey(fake4), `matchKey with eol ${fake4}`)
+  }
+  t.end()
+})
+
+test('Test PEM matchPrivateKey', t => {
+  const eols = ['\r', '\r\n', '\n']
+  for (let i = 0; i < beginPrivHeaders.length; i++) {
+    const eol = eols[i % eols.length]
+    const pem = `${beginPrivHeaders[i]}${eol}AQ==${eol}${endPrivHeaders[i]}`
+    const match = PEM.matchPrivateKey(pem)
+
+    t.ok(match, `matchPrivateKey ${match} ${pem}`)
+    t.ok(match.endsWith('PRIVATE KEY'), `matchPrivateKey ${match}`)
+
+    const fake1 = `${beginPrivHeaders[i]}${endPrivHeaders[i]}`
+    const fake2 = `${beginPrivHeaders[i]}${eol}AQ==${eol}${endPubHeaders[i]}`
+    t.notOk(PEM.matchKey(fake1), `matchPrivateKey fake ${fake1}`)
+    t.notOk(PEM.matchKey(fake2), `matchPrivateKey fake ${fake2}`)
+  }
+  t.end()
+})
+
+test('Test PEM matchPublicKey', t => {
+  const eols = ['\r', '\r\n', '\n']
+  for (let i = 0; i < beginPubHeaders.length; i++) {
+    const eol = eols[i % eols.length]
+    const pem = `${beginPubHeaders[i]}${eol}AQ==${eol}${endPubHeaders[i]}`
+    const match = PEM.matchPublicKey(pem)
+
+    t.ok(match, `matchPublicKey ${match} ${pem}`)
+    t.ok(match.endsWith('PUBLIC KEY'), `matchPublicKey ${match}`)
+
+    const fake1 = `${beginPubHeaders[i]}${endPubHeaders[i]}`
+    const fake2 = `${beginPubHeaders[i]}${eol}AQ==${eol}${endPrivHeaders[i]}`
+    t.notOk(PEM.matchKey(fake1), `matchPublicKey fake ${fake1}`)
+    t.notOk(PEM.matchKey(fake2), `matchPublicKey fake ${fake2}`)
   }
   t.end()
 })

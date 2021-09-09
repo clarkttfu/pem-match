@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tape test/*",
+    "coverage": "npx nyc tape test/*",
     "lint": "eslint index.js test/*.js",
     "types": "tsc index.js --declaration --allowJs --emitDeclarationOnly"
   },

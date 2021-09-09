@@ -24,11 +24,11 @@ const PATTERN_X509_END = /-----END (?<label>(?:(?:TRUSTED |X509 )?(?:CERTIFICATE
   // can return a function as the exported value.
   return {
     matchKey,
-    matchPrivateKey,
-    matchPublicKey,
     matchKeyBegin: pem => matchBegin(pem, PATTERN_KEY_BEGIN),
     matchKeyEnd: pem => matchEnd(pem, PATTERN_KEY_END),
     matchX509,
+    matchPrivateKey,
+    matchPublicKey,
     matchX509Begin: pem => matchBegin(pem, PATTERN_X509_BEGIN),
     matchX509End: pem => matchEnd(pem, PATTERN_X509_END),
     trimLines
