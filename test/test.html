@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Using pem-match</title>
+  <script src="../index.js"></script>
+</head>
+
+<body>
+  <div><code>openssl genrsa 1024</code></div>
+  <div>
+    <label>Sample: </label>
+    <button onclick="verifyKey()">Click to verify</button>
+  </div>
+
+  <textarea id="sample" name="private key" rows="15" cols="64">
+-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDAkCBSOyqYJMMlHhUWhkCwhGra9EDmzV3pzvzztfv/WTMQj2HH
+P8rf2fYsojoST7PY+waJidShYI/6c593KJ0atqABmpaCessLtqQlsfhRPgIcVX34
+JaPCP/Vs+JKBp1lX3w6xtiHb/JAXIuoyTtGnLURVmIwaIo+3ZbhZXCcI1wIDAQAB
+AoGBAJiz8p2jQ9ThGkud/nUdQ8F3UNGPbsRYyYe3WErf3xWQo/kW6yA5y2UXEKw2
+fby1rdZ8wqNhRNgwnhyrgiLZdzMtnkkYFV4v9DZOOIPBK8ZS5Pzln+e2JURtBdIy
+frZdUCti9DXj1rcbiuILf8Q7qNrT2Tyx+67iEBMy+K6OonZBAkEA8N7m+6atEqyD
+m9sAkgn0vo4iAWaIGWFJp3SOriUSQM6qr/6/jbWPh7jQhD/9/Ce3G86yLG4rZ4nk
+5/p02sgdIQJBAMyodOJ/RvcPTf4X+6LVD1JZxMCQaMq6Aha8fAdh7dsuvg3egFOo
+sISxOJHHozN7oLCkYv3Q5fL16ltIApX3LvcCQH47sz3rSgThWE/T5GakxRkgj/2/
+6E+0xs71rNjjIL/KD3YQwf7YShJM7yqABvGhNrtiBcp3KlQm1kok3hzSh0ECQAHo
+dCaEb0HwZ5a93H+5IspuwdHVxtRVBZ32peVfuVr4xZbVgzbEdNjX2iIpzVC2j1n2
+PmIFZ49rUYMGWdfSFSMCQQC03ee0QjNcUzxK/ntnoFf0fnUTNJZ5miTlKGs/I50m
+Mrz/bzr+VtYheKajMhb1JBO3v6BpB+0KE5GS0Q6+NmL5
+-----END RSA PRIVATE KEY-----
+  </textarea>
+
+  <script>
+    function verifyKey () {
+      const { label, type } = PemMatch.matchKey(document.getElementById('sample').value);
+      if (label) {
+        alert(label);
+      }
+    }
+  </script>
+</body>
+
+</html>

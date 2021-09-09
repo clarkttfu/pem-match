@@ -2,6 +2,7 @@ const test = require('tape')
 const PEM = require('../index.js')
 
 const realKey = `
+
 -----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQDAkCBSOyqYJMMlHhUWhkCwhGra9EDmzV3pzvzztfv/WTMQj2HH
 P8rf2fYsojoST7PY+waJidShYI/6c593KJ0atqABmpaCessLtqQlsfhRPgIcVX34
@@ -77,13 +78,13 @@ test('Test PEM matchKey', t => {
   for (let i = 0; i < beginHeaders.length; i++) {
     const eol = eols[i % eols.length]
 
-    const pem = `${beginHeaders[i]}${eol}AQ==${eol}${endHeaders[i]}`
+    const pem = `${eol}${beginHeaders[i]}AQ==${endHeaders[i]}${eol}`
     const pem2 = `${beginHeaders[i]}AQ==${endHeaders[i]}`
 
     t.ok(PEM.matchKey(pem), `matchKey with eol ${pem}`)
     t.ok(PEM.matchKey(pem2), `matchKey without eol ${pem}`)
 
-    const fake1 = `${beginHeaders[i]}${eol}${eol}${endHeaders[i]}`
+    const fake1 = `${eol}${beginHeaders[i]}${endHeaders[i]}`
     const fake2 = `${beginHeaders[i]}%^${eol}${endHeaders[i]}`
     const fake3 = `${beginHeaders[i]}${eol}AQ==`
     const fake4 = `AQ==${eol}${endHeaders[i]}`

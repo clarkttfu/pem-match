@@ -1,11 +1,11 @@
 {
   "name": "pem-match",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Match PEM file headers",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*",
-    "coverage": "npx nyc tape test/*",
+    "test": "tape test/*.js",
+    "coverage": "npx nyc tape test/*.j",
     "lint": "eslint index.js test/*.js",
     "types": "tsc index.js --declaration --allowJs --emitDeclarationOnly"
   },

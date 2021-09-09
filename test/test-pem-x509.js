@@ -44,7 +44,7 @@ test('Test PEM matchX509', t => {
   for (let i = 0; i < beginHeaders.length; i++) {
     const eol = eols[i % eols.length]
 
-    const pem = `${beginHeaders[i]}${eol}AQ==${eol}${endHeaders[i]}`
+    const pem = `${eol}${beginHeaders[i]}AQ==${endHeaders[i]}${eol}`
     const pem2 = `${beginHeaders[i]}AQ==${endHeaders[i]}`
     const match = PEM.matchX509(pem)
 
@@ -52,7 +52,7 @@ test('Test PEM matchX509', t => {
     t.ok(PEM.matchX509(pem2), `matchX509 without eol ${pem}`)
 
     const fake1 = `${beginHeaders[i]}${eol}${eol}${endHeaders[i]}`
-    const fake2 = `${beginHeaders[i]}${eol}AQ==`
+    const fake2 = `${beginHeaders[i]}AQ==${eol}`
     const fake3 = `AQ==${eol}${endHeaders[i]}`
 
     t.notOk(PEM.matchX509(fake1), `matchX509 with eol ${fake1}`)

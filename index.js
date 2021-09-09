@@ -16,7 +16,7 @@ const PATTERN_X509_END = /-----END (?<label>(?:(?:TRUSTED |X509 )?(?<t1>CERTIFIC
     module.exports = factory()
   } else {
     // Browser globals (root is window)
-    root.returnExports = factory()
+    root.PemMatch = factory()
   }
 }(typeof self !== 'undefined' ? self : this, function () {
   // Just return a value to define the module export.
@@ -69,7 +69,7 @@ function matchKey (pem) {
       return
     }
 
-    const key = pem.replace(PATTERN_KEY_BEGIN, '')
+    const key = trimLines(pem).replace(PATTERN_KEY_BEGIN, '')
       .replace(PATTERN_KEY_END, '')
 
     if (isValidBase64(key)) {
@@ -80,7 +80,7 @@ function matchKey (pem) {
 
 function isValidBase64 (content) {
   if (content && typeof content === 'string') {
-    const joinedLines = content.replace(/\n|\r\n/g, '')
+    const joinedLines = content.replace(/[\r\n]/g, '')
     if (!joinedLines) {
       return false
     }
@@ -92,7 +92,9 @@ function isValidBase64 (content) {
       } catch (err) {
       }
     } else {
-      return !!Buffer.from(joinedLines, 'base64').length
+      const decodeLen = Buffer.from(joinedLines, 'base64').length
+      const originLen = joinedLines.length / 4 * 3
+      return decodeLen > 0 && decodeLen >= originLen - 2
     }
   }
 }
@@ -110,7 +112,7 @@ function matchX509 (pem) {
       return
     }
 
-    const key = pem.replace(PATTERN_X509_BEGIN, '')
+    const key = trimLines(pem).replace(PATTERN_X509_BEGIN, '')
       .replace(PATTERN_X509_END, '')
 
     if (isValidBase64(key)) {
