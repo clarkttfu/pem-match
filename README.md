@@ -11,69 +11,50 @@ For each input pem string:
 
 ## API
 
+### PEM.matchKey(pem)
+
+Match and return `{ label, type }` or `undefined`:
+- `label` could be : 
+  - `PRIVATE KEY`
+  - `RSA PRIVATE KEY`
+  - `ANY PRIVATE KEY`
+  - `ENCRYPTED PRIVATE KEY`
+  - `PUBLIC KEY`
+  - ...
+- `type`:
+  - `PRIVATE`
+  - `PUBLIC`
+
+### PEM.matchX509(pem)
+
+Match and return `{ label }` or `undefined`:
+And `label` could be:
+- `CERTIFICATE`
+- `TRUSTED CERTIFICATE`
+- `CERTIFICATE REQUEST`
+- `NEW CERTIFICATE REQUEST`
+- `X509 CRL`
+
 ### PEM.isPrivateKey(pem)
 
-Match and return below labels or `undefined`:
-- `PRIVATE KEY`
-- `RSA PRIVATE KEY`
-- `DSA PRIVATE KEY`
-- `ANY PRIVATE KEY`
-- `EC PRIVATE KEY`
-- `ENCRYPTED PRIVATE KEY`
+Match and return the private key label or `undefined`.
 
 ### PEM.isPublicKey(pem)
 
-Match and return below labels or `undefined`:
-- `PUBLIC KEY`
-- `RSA PUBLIC KEY`
-- `DSA PUBLIC KEY`
-- `SSH2 PUBLIC KEY`
+Match and return the private key label or `undefined`.
 
-### PEM.isKey(pem)
+### PEM.matchKeyBegin(pem: string)
 
-Match and return either private or public key.
+Match only begin header and return `{ label, type }` or `undefined`
 
-### PEM.isX509Cert(pem)
+### PEM.matchKeyEnd(pem: string)
 
-Match and return below labels or `undefined`:
-- `X509 CERTIFICATE`
-- `CERTIFICATE`
-- `TRUSTED CERTIFICATE`
+Match only end footer and return `{ label, type }` or `undefined`
 
-### PEM.isX509Request(pem)
+### PEM.matchX509Begin(pem: string)
 
-Match and return below labels or `undefined`:
-- `NEW CERTIFICATE REQUEST`
-- `CERTIFICATE REQUEST`
+Match only begin header and return `{ label }` or `undefined`
 
-### PEM.isX509CRL(pem)
+### PEM.matchX509End(pem: string)
 
-Match and return below labels or `undefined`:
-- `X509 CRL`
-
-## More API
-
-### PEM.beginWithPrivateKey(pem)
-Check if pem begins with a private key label then return it.
-### PEM.endWithPrivateKey(pem)
-Check if pem ends with a private key label then return it.
-
-### PEM.beginWithPublicKey(pem)
-Check if pem begins with a public key label then return it.
-### PEM.endWithPublicKey(pem)
-Check if pem ends with a public key label then return it.
-
-### PEM.beginWithX509Cert(pem)
-Check if pem begins with a x509 certificate label then return it.
-### PEM.endWithX509Cert(pem)
-Check if pem ends with a x509 certificate label then return it.
-
-### PEM.beginWithX509Request(pem)
-Check if pem begins with a x509 certificate request label then return it.
-### PEM.endWithX509Request(pem)
-Check if pem ends with a x509 certificate request label then return it.
-
-### PEM.beginWithX509CRL(pem)
-Check if pem begins with a x509 CRL label then return it.
-### PEM.endWithX509CRL(pem)
-Check if pem ends with a x509 CRL label then return it.
+Match only end footer and return `{ label }` or `undefined`
