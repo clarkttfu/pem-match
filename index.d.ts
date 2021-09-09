@@ -1,8 +1,9 @@
+export type PemKeyType = 'PUBLIC' | 'PRIVATE'
+export type PemX509Type = 'CERTIFICATE' | 'REQUEST' | 'CRL'
+
 export interface PemMatch {
   label: string;
-}
-export interface PemKeyMatch extends PemMatch {
-  type: 'PUBLIC' | 'PRIVATE';
+  type : PemKeyType | PemX509Type;
 }
 
 export function matchKey(pem: string): PemKeyMatch;
@@ -15,4 +16,7 @@ export declare function matchX509End(pem: string): PemMatch;
 
 export function isPrivateKey(pem: string): string;
 export function isPublicKey(pem: string): string;
+export function isX509Cert(pem: string): string;
+export function isX509Request(pem: string): string;
+export function isX509CRL(pem: string): string;
 export function trimLines(input: string): string;

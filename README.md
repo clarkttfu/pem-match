@@ -14,34 +14,30 @@ For each input pem string:
 ### PEM.matchKey(pem)
 
 Match and return `{ label, type }` or `undefined`:
-- `label` could be : 
+- Property `label` could be : 
   - `PRIVATE KEY`
   - `RSA PRIVATE KEY`
   - `ANY PRIVATE KEY`
   - `ENCRYPTED PRIVATE KEY`
   - `PUBLIC KEY`
   - ...
-- `type`:
+- Property `type`:
   - `PRIVATE`
   - `PUBLIC`
 
 ### PEM.matchX509(pem)
 
-Match and return `{ label }` or `undefined`:
-And `label` could be:
-- `CERTIFICATE`
-- `TRUSTED CERTIFICATE`
-- `CERTIFICATE REQUEST`
-- `NEW CERTIFICATE REQUEST`
-- `X509 CRL`
-
-### PEM.isPrivateKey(pem)
-
-Match and return the private key label or `undefined`.
-
-### PEM.isPublicKey(pem)
-
-Match and return the private key label or `undefined`.
+Match and return `{ label, type }` or `undefined`:
+- Property `label` could be:
+  - `CERTIFICATE`
+  - `TRUSTED CERTIFICATE`
+  - `CERTIFICATE REQUEST`
+  - `NEW CERTIFICATE REQUEST`
+  - `X509 CRL`
+- Property `type`:
+  - `CERTIFICATE`
+  - `REQUEST`
+  - `CRL`
 
 ### PEM.matchKeyBegin(pem: string)
 
@@ -58,3 +54,23 @@ Match only begin header and return `{ label }` or `undefined`
 ### PEM.matchX509End(pem: string)
 
 Match only end footer and return `{ label }` or `undefined`
+
+### PEM.isPrivateKey(pem)
+
+Match and return the private key label or `undefined`.
+
+### PEM.isPublicKey(pem)
+
+Match and return the private key label or `undefined`.
+
+### PEM.isX509Cert(pem)
+
+Match and return the certificate label or `undefined`.
+
+### PEM.isX509Request(pem)
+
+Match and return the certificate request label or `undefined`.
+
+### PEM.isX509CRL(pem)
+
+Match and return the CRL label or `undefined`.

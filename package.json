@@ -1,6 +1,6 @@
 {
   "name": "pem-match",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Match PEM file headers",
   "main": "index.js",
   "scripts": {

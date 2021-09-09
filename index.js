@@ -2,8 +2,8 @@
 
 const PATTERN_KEY_BEGIN = /^----[- ]BEGIN (?<label>(?:(?:[A-Z][A-Z0-9]+) )?(?<type>PRIVATE|PUBLIC) KEY)[ -]----/
 const PATTERN_KEY_END = /----[- ]END (?<label>(?:(?:[A-Z][A-Z0-9]+) )?(?<type>PRIVATE|PUBLIC) KEY)[ -]----$/
-const PATTERN_X509_BEGIN = /^-----BEGIN (?<label>(?:(?:TRUSTED |X509 )?(?:CERTIFICATE))|(?:(?:NEW )?CERTIFICATE REQUEST)|(?:X509 (?:CRL)))-----/
-const PATTERN_X509_END = /-----END (?<label>(?:(?:TRUSTED |X509 )?(?:CERTIFICATE))|(?:(?:NEW )?CERTIFICATE REQUEST)|(?:X509 (?:CRL)))-----$/
+const PATTERN_X509_BEGIN = /^-----BEGIN (?<label>(?:(?:TRUSTED |X509 )?(?<t1>CERTIFICATE))|(?:(?:NEW )?CERTIFICATE (?<t2>REQUEST))|(?:X509 (?<t3>CRL)))-----/
+const PATTERN_X509_END = /-----END (?<label>(?:(?:TRUSTED |X509 )?(?<t1>CERTIFICATE))|(?:(?:NEW )?CERTIFICATE (?<t2>REQUEST))|(?:X509 (?<t3>CRL)))-----$/
 
 ;(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -27,10 +27,13 @@ const PATTERN_X509_END = /-----END (?<label>(?:(?:TRUSTED |X509 )?(?:CERTIFICATE
     matchKeyBegin: pem => matchBegin(pem, PATTERN_KEY_BEGIN),
     matchKeyEnd: pem => matchEnd(pem, PATTERN_KEY_END),
     matchX509,
-    isPrivateKey,
-    isPublicKey,
     matchX509Begin: pem => matchBegin(pem, PATTERN_X509_BEGIN),
     matchX509End: pem => matchEnd(pem, PATTERN_X509_END),
+    isPrivateKey,
+    isPublicKey,
+    isX509Cert: pem => isX509(pem, 'CERTFICATE'),
+    isX509Request: pem => isX509(pem, 'REQUEST'),
+    isX509CRL: pem => isX509(pem, 'CRL'),
     trimLines
   }
 }))
@@ -45,6 +48,13 @@ function isPrivateKey (pem) {
 function isPublicKey (pem) {
   const match = matchKey(pem)
   if (match && match.type === 'PUBLIC') {
+    return match.label
+  }
+}
+
+function isX509 (pem, suffix) {
+  const match = matchX509(pem)
+  if (match && match.label.endsWith(suffix)) {
     return match.label
   }
 }
@@ -92,6 +102,9 @@ function matchX509 (pem) {
   const endMatch = matchEnd(pem, PATTERN_X509_END)
 
   if (beginMatch && endMatch) {
+    beginMatch.type = beginMatch.t1 || beginMatch.t2 || beginMatch.t3
+    endMatch.type = endMatch.t1 || endMatch.t2 || endMatch.t3
+
     if (beginMatch.label !== endMatch.label ||
       beginMatch.type !== endMatch.type) {
       return
