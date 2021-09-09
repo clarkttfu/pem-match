@@ -1,0 +1,28 @@
+{
+  "name": "pem-match",
+  "version": "0.1.0",
+  "description": "Match PEM file headers",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*",
+    "lint": "eslint index.js test/*.js",
+    "types": "tsc index.js --declaration --allowJs --emitDeclarationOnly"
+  },
+  "keywords": [
+    "pem",
+    "key",
+    "x509",
+    "certificate"
+  ],
+  "author": "clarkttfu@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "tape": "^5.3.1",
+    "typescript": "^4.4.2"
+  }
+}
