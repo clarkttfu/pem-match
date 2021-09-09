@@ -1,13 +1,13 @@
 PEM Match
 ====
 
-Regex to match PEM file headers according to [OpenSSL pem.h definitions](https://github.com/openssl/openssl/blob/master/include/openssl/pem.h)
+Regex to match PEM file headers according to [OpenSSL pem.h](https://github.com/openssl/openssl/blob/master/include/openssl/pem.h)
 
 For each input pem string:
 1. check if it contains PEM header line
 2. check if it contains corresponding footer line
 3. join the in-between lines and try decoding it as base64
-4. return the matched header label, i.e. `RSA PRIVATE KEY`
+4. return the matched `label`, i.e. `RSA PRIVATE KEY` and `type`, i.e. `PRIVATE`.
 
 ## API
 
