@@ -27,22 +27,22 @@ const PATTERN_X509_END = /-----END (?<label>(?:(?:TRUSTED |X509 )?(?:CERTIFICATE
     matchKeyBegin: pem => matchBegin(pem, PATTERN_KEY_BEGIN),
     matchKeyEnd: pem => matchEnd(pem, PATTERN_KEY_END),
     matchX509,
-    matchPrivateKey,
-    matchPublicKey,
+    isPrivateKey,
+    isPublicKey,
     matchX509Begin: pem => matchBegin(pem, PATTERN_X509_BEGIN),
     matchX509End: pem => matchEnd(pem, PATTERN_X509_END),
     trimLines
   }
 }))
 
-function matchPrivateKey (pem) {
+function isPrivateKey (pem) {
   const match = matchKey(pem)
   if (match && match.type === 'PRIVATE') {
     return match.label
   }
 }
 
-function matchPublicKey (pem) {
+function isPublicKey (pem) {
   const match = matchKey(pem)
   if (match && match.type === 'PUBLIC') {
     return match.label

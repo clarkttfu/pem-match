@@ -78,12 +78,12 @@ test('Test PEM matchKey', t => {
   t.end()
 })
 
-test('Test PEM matchPrivateKey', t => {
+test('Test PEM isPrivateKey', t => {
   const eols = ['\r', '\r\n', '\n']
   for (let i = 0; i < beginPrivHeaders.length; i++) {
     const eol = eols[i % eols.length]
     const pem = `${beginPrivHeaders[i]}${eol}AQ==${eol}${endPrivHeaders[i]}`
-    const match = PEM.matchPrivateKey(pem)
+    const match = PEM.isPrivateKey(pem)
 
     t.ok(match, `matchPrivateKey ${match} ${pem}`)
     t.ok(match.endsWith('PRIVATE KEY'), `matchPrivateKey ${match}`)
@@ -96,12 +96,12 @@ test('Test PEM matchPrivateKey', t => {
   t.end()
 })
 
-test('Test PEM matchPublicKey', t => {
+test('Test PEM isPublicKey', t => {
   const eols = ['\r', '\r\n', '\n']
   for (let i = 0; i < beginPubHeaders.length; i++) {
     const eol = eols[i % eols.length]
     const pem = `${beginPubHeaders[i]}${eol}AQ==${eol}${endPubHeaders[i]}`
-    const match = PEM.matchPublicKey(pem)
+    const match = PEM.isPublicKey(pem)
 
     t.ok(match, `matchPublicKey ${match} ${pem}`)
     t.ok(match.endsWith('PUBLIC KEY'), `matchPublicKey ${match}`)
